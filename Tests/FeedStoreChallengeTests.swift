@@ -4,7 +4,6 @@
 
 import XCTest
 import FeedStoreChallenge
-import RealmSwift
 
 class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
@@ -21,14 +20,16 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	//  ***********************
 	
 	override func setUp() {
-		super.setUp()
-		
-		// Use an in-memory Realm identified by the name of the current test.
-		// This ensures that each test can't accidentally access or modify the data
-		// from other tests or the application itself, and because they're in-memory,
-		// there's nothing that needs to be cleaned up.
-		Realm.Configuration.defaultConfiguration.inMemoryIdentifier = self.name
-	}
+			super.setUp()
+
+			setupEmptyStoreState()
+		}
+
+		override func tearDown() {
+			super.tearDown()
+
+			undoStoreSideEffects()
+		}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
 		let sut = makeSUT()
@@ -105,10 +106,26 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		let sut = RealmFeedStore()
+		let sut = RealmFeedStore(storeURL: testSpecificStoreURL())
 		
 		return sut
 	}
+	
+	private func setupEmptyStoreState() {
+			deleteStoreArtifacts()
+		}
+
+		private func undoStoreSideEffects() {
+			deleteStoreArtifacts()
+		}
+
+		private func deleteStoreArtifacts() {
+			try? FileManager.default.removeItem(at: testSpecificStoreURL())
+		}
+	
+	private func testSpecificStoreURL() -> URL {
+			return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).realm")
+		}
 	
 }
 

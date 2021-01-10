@@ -11,10 +11,11 @@ import RealmSwift
 
 public final class RealmFeedStore {
 
-	let realm = try! Realm()
+	let realm: Realm
 	
-	public init() {
-		
+	public init(storeURL: URL) {
+		let configuration = Realm.Configuration(fileURL: storeURL)
+		realm = try! Realm(configuration: configuration)
 	}
 }
 
