@@ -32,6 +32,7 @@ extension RealmFeedStore: FeedStore {
 		realmFeed.append(objectsIn: feed.map(RealmFeedImage.init))
 		let cache = Cache(value: [realmFeed, timestamp])
 		try! realm.write {
+			realm.deleteAll()
 			realm.add(cache)
 			completion(nil)
 		}
