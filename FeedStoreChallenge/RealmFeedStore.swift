@@ -42,10 +42,10 @@ extension RealmFeedStore: FeedStore {
 		
 		let cache = realm.objects(Cache.self)
 		
-		if cache.isEmpty {
-			completion(.empty)
+		if let cache = cache.first {
+			completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
 		} else {
-			completion(.found(feed: cache[0].localFeed, timestamp: cache[0].timestamp))
+			completion(.empty)
 		}
 	}
 }
