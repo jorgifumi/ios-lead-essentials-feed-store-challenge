@@ -11,7 +11,7 @@ import RealmSwift
 
 public final class RealmFeedStore {
 
-	let realm: Realm
+	private let realm: Realm
 	
 	public init(storeURL: URL) {
 		let configuration = Realm.Configuration(fileURL: storeURL)
