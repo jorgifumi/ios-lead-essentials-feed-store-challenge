@@ -105,27 +105,35 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	// - MARK: Helpers
 	
-	private func makeSUT() -> FeedStore {
+	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
 		let sut = RealmFeedStore(storeURL: testSpecificStoreURL())
-		
+
+		trackFromMemoryLeaks(sut, file: file, line: line)
+
 		return sut
 	}
 	
 	private func setupEmptyStoreState() {
-			deleteStoreArtifacts()
-		}
+		deleteStoreArtifacts()
+	}
 
-		private func undoStoreSideEffects() {
-			deleteStoreArtifacts()
-		}
+	private func undoStoreSideEffects() {
+		deleteStoreArtifacts()
+	}
 
-		private func deleteStoreArtifacts() {
-			try? FileManager.default.removeItem(at: testSpecificStoreURL())
-		}
+	private func deleteStoreArtifacts() {
+		try? FileManager.default.removeItem(at: testSpecificStoreURL())
+	}
 	
 	private func testSpecificStoreURL() -> URL {
-			return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).realm")
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).realm")
+	}
+
+	private func trackFromMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
 		}
+	}
 	
 }
 
