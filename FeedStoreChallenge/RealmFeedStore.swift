@@ -38,9 +38,9 @@ extension RealmFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let realmFeed = List<RealmFeedImage>()
-		realmFeed.append(objectsIn: feed.map(RealmFeedImage.init))
-		let cache = Cache(value: [realmFeed, timestamp])
+		let realmFeed = List<RealmFeedStoreImage>()
+		realmFeed.append(objectsIn: feed.map(RealmFeedStoreImage.init))
+		let cache = RealmFeedStoreCache(value: [realmFeed, timestamp])
 
 		do {
 			let realm = try getRealm()
@@ -57,7 +57,7 @@ extension RealmFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		do {
 			let realm = try getRealm()
-			let cache = realm.objects(Cache.self)
+			let cache = realm.objects(RealmFeedStoreCache.self)
 
 			if let cache = cache.first {
 				completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
@@ -70,8 +70,8 @@ extension RealmFeedStore: FeedStore {
 	}
 }
 
-class Cache: Object {
-	let feed = List<RealmFeedImage>()
+class RealmFeedStoreCache: Object {
+	let feed = List<RealmFeedStoreImage>()
 	@objc dynamic var timestamp = Date()
 	
 	var localFeed: [LocalFeedImage] {
@@ -79,7 +79,7 @@ class Cache: Object {
 	}
 }
 
-class RealmFeedImage: Object {
+class RealmFeedStoreImage: Object {
 	@objc dynamic var id: String = ""
 	@objc dynamic var imageDescription: String? = nil
 	@objc dynamic var location: String? = nil
