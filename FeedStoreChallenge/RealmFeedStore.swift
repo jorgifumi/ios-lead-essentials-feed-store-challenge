@@ -70,7 +70,7 @@ extension RealmFeedStore: FeedStore {
 	}
 }
 
-class RealmFeedStoreCache: Object {
+final class RealmFeedStoreCache: Object {
 	let feed = List<RealmFeedStoreImage>()
 	@objc dynamic var timestamp = Date()
 	
@@ -79,7 +79,7 @@ class RealmFeedStoreCache: Object {
 	}
 }
 
-class RealmFeedStoreImage: Object {
+final class RealmFeedStoreImage: Object {
 	@objc dynamic var id: String = ""
 	@objc dynamic var imageDescription: String? = nil
 	@objc dynamic var location: String? = nil
