@@ -12,28 +12,32 @@ import RealmSwift
 public final class RealmFeedStore {
 
 	private let configuration: Realm.Configuration
+
+	private var _realm: Realm?
+
+	private let queue = DispatchQueue(label: "\(RealmFeedStore.self)Queue", qos: .userInitiated)
 	
 	public init(storeURL: URL) {
 		configuration = Realm.Configuration(fileURL: storeURL)
 	}
 
-	private var _realm: Realm?
-
 	private func getRealm() throws -> Realm {
-		try _realm ?? Realm(configuration: configuration)
+		try _realm ?? Realm(configuration: configuration, queue: queue)
 	}
 }
 
 extension RealmFeedStore: FeedStore {
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-		do {
-			let realm = try getRealm()
-			try realm.write {
-				realm.deleteAll()
-				completion(nil)
+		queue.sync {
+			do {
+				let realm = try self.getRealm()
+				try realm.write {
+					realm.deleteAll()
+					completion(nil)
+				}
+			} catch let error {
+				completion(error)
 			}
-		} catch let error {
-			completion(error)
 		}
 	}
 	
@@ -41,31 +45,34 @@ extension RealmFeedStore: FeedStore {
 		let realmFeed = List<RealmFeedStoreImage>()
 		realmFeed.append(objectsIn: feed.map(RealmFeedStoreImage.init))
 		let cache = RealmFeedStoreCache(value: [realmFeed, timestamp])
-
-		do {
-			let realm = try getRealm()
-			try realm.write {
-				realm.deleteAll()
-				realm.add(cache)
-				completion(nil)
+		queue.sync {
+			do {
+				let realm = try self.getRealm()
+				try realm.write {
+					realm.deleteAll()
+					realm.add(cache)
+					completion(nil)
+				}
+			} catch let error {
+				completion(error)
 			}
-		} catch let error {
-			completion(error)
 		}
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		do {
-			let realm = try getRealm()
-			let cache = realm.objects(RealmFeedStoreCache.self)
+		queue.async {
+			do {
+				let realm = try self.getRealm()
+				let cache = realm.objects(RealmFeedStoreCache.self)
 
-			if let cache = cache.first {
-				completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
-			} else {
-				completion(.empty)
+				if let cache = cache.first {
+					completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
+				} else {
+					completion(.empty)
+				}
+			} catch let error {
+				completion(.failure(error))
 			}
-		} catch let error {
-			completion(.failure(error))
 		}
 	}
 }
