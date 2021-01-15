@@ -16,15 +16,20 @@ public final class RealmFeedStore {
 	public init(storeURL: URL) {
 		configuration = Realm.Configuration(fileURL: storeURL)
 	}
+
+	private var _realm: Realm?
+
+	private func getRealm() throws -> Realm {
+		try _realm ?? Realm(configuration: configuration)
+	}
 }
 
 extension RealmFeedStore: FeedStore {
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-		let realm: Realm?
 		do {
-			realm = try Realm(configuration: configuration)
-			try! realm?.write {
-				realm?.deleteAll()
+			let realm = try getRealm()
+			try realm.write {
+				realm.deleteAll()
 				completion(nil)
 			}
 		} catch let error {
@@ -37,12 +42,11 @@ extension RealmFeedStore: FeedStore {
 		realmFeed.append(objectsIn: feed.map(RealmFeedImage.init))
 		let cache = Cache(value: [realmFeed, timestamp])
 
-		let realm: Realm?
 		do {
-			realm = try Realm(configuration: configuration)
-			try! realm?.write {
-				realm?.deleteAll()
-				realm?.add(cache)
+			let realm = try getRealm()
+			try realm.write {
+				realm.deleteAll()
+				realm.add(cache)
 				completion(nil)
 			}
 		} catch let error {
@@ -51,12 +55,11 @@ extension RealmFeedStore: FeedStore {
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		let realm: Realm?
 		do {
-			realm = try Realm(configuration: configuration)
-			let cache = realm?.objects(Cache.self)
+			let realm = try getRealm()
+			let cache = realm.objects(Cache.self)
 
-			if let cache = cache?.first {
+			if let cache = cache.first {
 				completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
 			} else {
 				completion(.empty)
