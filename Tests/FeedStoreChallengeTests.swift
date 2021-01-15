@@ -20,16 +20,16 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	//  ***********************
 	
 	override func setUp() {
-			super.setUp()
+		super.setUp()
 
-			setupEmptyStoreState()
-		}
+		setupEmptyStoreState()
+	}
 
-		override func tearDown() {
-			super.tearDown()
+	override func tearDown() {
+		super.tearDown()
 
-			undoStoreSideEffects()
-		}
+		undoStoreSideEffects()
+	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
 		let sut = makeSUT()
@@ -99,7 +99,7 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	func test_storeSideEffects_runSerially() {
 		let sut = makeSUT()
-		
+
 		assertThatSideEffectsRunSerially(on: sut)
 	}
 	
