@@ -105,8 +105,8 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	// - MARK: Helpers
 	
-	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = RealmFeedStore(storeURL: testSpecificStoreURL())
+	private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+		let sut = RealmFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
 
 		trackFromMemoryLeaks(sut, file: file, line: line)
 
@@ -148,25 +148,27 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 
 	func test_retrieve_deliversFailureOnRetrievalError() {
-		let sut = makeSUT()
+		let storeURL = testSpecificStoreURL()
+		let sut = makeSUT(storeURL: storeURL)
 
-		writeInvalidData()
+		writeInvalidData(to: storeURL)
 
 		assertThatRetrieveDeliversFailureOnRetrievalError(on: sut)
 	}
 
 	func test_retrieve_hasNoSideEffectsOnFailure() {
-		let sut = makeSUT()
+		let storeURL = testSpecificStoreURL()
+		let sut = makeSUT(storeURL: storeURL)
 
-		writeInvalidData()
+		writeInvalidData(to: storeURL)
 
 		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
 	}
 
 	// MARK: - Helpers
 
-	private func writeInvalidData() {
-		try! "invalid data".write(to: testSpecificStoreURL(), atomically: false, encoding: .utf8)
+	private func writeInvalidData(to url: URL) {
+		try! "invalid data".write(to: url, atomically: false, encoding: .utf8)
 	}
 }
 
