@@ -194,18 +194,19 @@ extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 
 }
 
-//extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
+extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
+
+	func test_delete_deliversErrorOnDeletionError() {
+		let noDeletionPermissionURL = cachesDirectory()
+		let sut = makeSUT(storeURL: noDeletionPermissionURL)
+
+		assertThatDeleteDeliversErrorOnDeletionError(on: sut)
+	}
+
+	func test_delete_hasNoSideEffectsOnDeletionError() {
+//		let sut = makeSUT()
 //
-//	func test_delete_deliversErrorOnDeletionError() {
-////		let sut = makeSUT()
-////
-////		assertThatDeleteDeliversErrorOnDeletionError(on: sut)
-//	}
-//
-//	func test_delete_hasNoSideEffectsOnDeletionError() {
-////		let sut = makeSUT()
-////
-////		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
-//	}
-//
-//}
+//		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
+	}
+
+}
