@@ -150,17 +150,24 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	func test_retrieve_deliversFailureOnRetrievalError() {
 		let sut = makeSUT()
 
-		try! "invalid data".write(to: testSpecificStoreURL(), atomically: false, encoding: .utf8)
+		writeInvalidData()
 
 		assertThatRetrieveDeliversFailureOnRetrievalError(on: sut)
 	}
 
 	func test_retrieve_hasNoSideEffectsOnFailure() {
-////		let sut = makeSUT()
-////
-////		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
+		let sut = makeSUT()
+
+		writeInvalidData()
+
+		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
 	}
-//
+
+	// MARK: - Helpers
+
+	private func writeInvalidData() {
+		try! "invalid data".write(to: testSpecificStoreURL(), atomically: false, encoding: .utf8)
+	}
 }
 
 //extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
