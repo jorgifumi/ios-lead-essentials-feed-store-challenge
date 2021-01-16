@@ -186,7 +186,8 @@ extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	}
 
 	func test_insert_hasNoSideEffectsOnInsertionError() {
-//		let sut = makeSUT()
+//		let noWritePermissionURL = cachesDirectory()
+//		let sut = makeSUT(storeURL: noWritePermissionURL)
 //
 //		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
 	}
