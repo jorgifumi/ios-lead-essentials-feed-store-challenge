@@ -44,9 +44,7 @@ extension RealmFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let realmFeed = List<RealmFeedStoreImage>()
-		realmFeed.append(objectsIn: feed.map(RealmFeedStoreImage.init))
-		let cache = RealmFeedStoreCache(value: [realmFeed, timestamp])
+
 		queue.async { [weak self] in
 			do {
 				guard let realm = try self?.getRealm() else {
@@ -54,7 +52,7 @@ extension RealmFeedStore: FeedStore {
 				}
 				try realm.write {
 					realm.deleteAll()
-					realm.add(cache)
+					realm.add(RealmFeedStore.map(feed, timestamp: timestamp))
 					completion(nil)
 				}
 			} catch let error {
@@ -79,6 +77,12 @@ extension RealmFeedStore: FeedStore {
 				completion(.failure(error))
 			}
 		}
+	}
+
+	private static func map(_ feed: [LocalFeedImage], timestamp: Date) -> RealmFeedStoreCache {
+		let realmFeed = List<RealmFeedStoreImage>()
+		realmFeed.append(objectsIn: feed.map(RealmFeedStoreImage.init))
+		return RealmFeedStoreCache(value: [realmFeed, timestamp])
 	}
 }
 
