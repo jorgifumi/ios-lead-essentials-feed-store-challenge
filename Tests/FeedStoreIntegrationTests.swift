@@ -61,11 +61,11 @@ class FeedStoreIntegrationTests: XCTestCase {
 		let storeToInsert = makeSUT()
 		let storeToDelete = makeSUT()
 		let storeToLoad = makeSUT()
-		
+
 		insert((uniqueImageFeed(), Date()), to: storeToInsert)
-		
+
 		deleteCache(from: storeToDelete)
-		
+
 		expect(storeToLoad, toRetrieve: .empty)
 	}
 	
