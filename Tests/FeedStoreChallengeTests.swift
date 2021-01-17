@@ -138,7 +138,6 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 			XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
 		}
 	}
-	
 }
 
 //  ***********************
@@ -204,9 +203,9 @@ extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
 	}
 
 	func test_delete_hasNoSideEffectsOnDeletionError() {
-//		let sut = makeSUT()
+//		let noDeletionPermissionURL = cachesDirectory()
+//		let sut = makeSUT(storeURL: noDeletionPermissionURL)
 //
 //		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
 	}
-
 }
