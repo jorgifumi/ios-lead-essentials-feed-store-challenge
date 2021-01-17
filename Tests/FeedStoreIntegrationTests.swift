@@ -27,9 +27,9 @@ class FeedStoreIntegrationTests: XCTestCase {
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
-		//        let sut = makeSUT()
-		//
-		//        expect(sut, toRetrieve: .empty)
+		let sut = makeSUT()
+
+		expect(sut, toRetrieve: .empty)
 	}
 	
 	func test_retrieve_deliversFeedInsertedOnAnotherInstance() {
@@ -70,9 +70,13 @@ class FeedStoreIntegrationTests: XCTestCase {
 	}
 	
 	// - MARK: Helpers
-	
-	private func makeSUT() -> FeedStore {
-		fatalError("Must be implemented")
+
+	private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+		let sut = RealmFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
+
+		trackFromMemoryLeaks(sut, file: file, line: line)
+
+		return sut
 	}
 	
 	private func setupEmptyStoreState() {
@@ -82,5 +86,18 @@ class FeedStoreIntegrationTests: XCTestCase {
 	private func undoStoreSideEffects() {
 		
 	}
-	
+
+	private func testSpecificStoreURL() -> URL {
+		return cachesDirectory().appendingPathComponent("\(type(of: self)).realm")
+	}
+
+	private func cachesDirectory() -> URL {
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+	}
+
+	private func trackFromMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+		}
+	}
 }
