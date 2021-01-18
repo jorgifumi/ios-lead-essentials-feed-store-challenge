@@ -174,38 +174,3 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 		try! "invalid data".write(to: url, atomically: false, encoding: .utf8)
 	}
 }
-
-extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
-
-	func test_insert_deliversErrorOnInsertionError() {
-		let noWritePermissionURL = cachesDirectory()
-		let sut = makeSUT(storeURL: noWritePermissionURL)
-
-		assertThatInsertDeliversErrorOnInsertionError(on: sut)
-	}
-
-	func test_insert_hasNoSideEffectsOnInsertionError() {
-//		let noWritePermissionURL = cachesDirectory()
-//		let sut = makeSUT(storeURL: noWritePermissionURL)
-//
-//		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
-	}
-
-}
-
-extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
-
-	func test_delete_deliversErrorOnDeletionError() {
-		let noDeletionPermissionURL = cachesDirectory()
-		let sut = makeSUT(storeURL: noDeletionPermissionURL)
-
-		assertThatDeleteDeliversErrorOnDeletionError(on: sut)
-	}
-
-	func test_delete_hasNoSideEffectsOnDeletionError() {
-//		let noDeletionPermissionURL = cachesDirectory()
-//		let sut = makeSUT(storeURL: noDeletionPermissionURL)
-//
-//		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
-	}
-}
