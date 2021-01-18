@@ -27,8 +27,9 @@ extension RealmFeedStore: FeedStore {
 				let realm = try Realm(configuration: configuration, queue: queue)
 				try realm.write {
 					realm.deleteAll()
-					completion(nil)
 				}
+				completion(nil)
+
 			} catch let error {
 				completion(error)
 			}
@@ -43,8 +44,9 @@ extension RealmFeedStore: FeedStore {
 				try realm.write {
 					realm.deleteAll()
 					realm.add(RealmFeedStore.map(feed, timestamp: timestamp))
-					completion(nil)
 				}
+				completion(nil)
+
 			} catch let error {
 				completion(error)
 			}
