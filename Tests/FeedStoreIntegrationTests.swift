@@ -4,6 +4,7 @@
 
 import XCTest
 import FeedStoreChallenge
+import RealmSwift
 
 class FeedStoreIntegrationTests: XCTestCase {
 	
@@ -72,7 +73,8 @@ class FeedStoreIntegrationTests: XCTestCase {
 	// - MARK: Helpers
 
 	private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = RealmFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
+		let configuration = Realm.Configuration(fileURL: storeURL ?? testSpecificStoreURL())
+		let sut = RealmFeedStore(configuration: configuration)
 
 		trackFromMemoryLeaks(sut, file: file, line: line)
 

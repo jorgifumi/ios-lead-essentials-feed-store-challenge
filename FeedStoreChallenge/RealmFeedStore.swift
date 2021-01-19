@@ -15,8 +15,8 @@ public final class RealmFeedStore {
 
 	private let queue = DispatchQueue(label: "\(RealmFeedStore.self)Queue", qos: .userInitiated)
 	
-	public init(storeURL: URL) {
-		configuration = Realm.Configuration(fileURL: storeURL)
+	public init(configuration: Realm.Configuration) {
+		self.configuration = configuration
 	}
 }
 
