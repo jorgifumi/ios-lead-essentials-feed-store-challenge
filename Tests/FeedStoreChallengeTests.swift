@@ -4,7 +4,6 @@
 
 import XCTest
 import FeedStoreChallenge
-import RealmSwift
 
 class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
@@ -19,6 +18,18 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	//  Repeat this process until all tests are passing.
 	//
 	//  ***********************
+	
+	override func setUp() {
+		super.setUp()
+
+		setupEmptyStoreState()
+	}
+
+	override func tearDown() {
+		super.tearDown()
+
+		undoStoreSideEffects()
+	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
 		let sut = makeSUT()
@@ -93,17 +104,25 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 	
 	// - MARK: Helpers
-
+	
 	private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-
-		let inMemoryIdentifier = storeURL == nil ? "TestingIdentifier" : nil
-		let configuration = Realm.Configuration(fileURL: storeURL, inMemoryIdentifier: inMemoryIdentifier)
-		let sut = RealmFeedStore(configuration: configuration)
-		_ = try? Realm(configuration: configuration)
+		let sut = RealmFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
 
 		trackFromMemoryLeaks(sut, file: file, line: line)
 
 		return sut
+	}
+	
+	private func setupEmptyStoreState() {
+		deleteStoreArtifacts()
+	}
+
+	private func undoStoreSideEffects() {
+		deleteStoreArtifacts()
+	}
+
+	private func deleteStoreArtifacts() {
+		try? FileManager.default.removeItem(at: testSpecificStoreURL())
 	}
 	
 	private func testSpecificStoreURL() -> URL {
