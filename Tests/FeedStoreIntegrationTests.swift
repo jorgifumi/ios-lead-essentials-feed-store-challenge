@@ -100,10 +100,4 @@ class FeedStoreIntegrationTests: XCTestCase {
 	private func cachesDirectory() -> URL {
 		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
 	}
-
-	private func trackFromMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-		addTeardownBlock { [weak instance] in
-			XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
-		}
-	}
 }

@@ -21,6 +21,7 @@
 		681CDC9B25AB052300DCBB0C /* RealmFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681CDC9A25AB052300DCBB0C /* RealmFeedStore.swift */; };
 		681CDCA625AB0A7400DCBB0C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 681CDCA525AB0A7400DCBB0C /* Realm */; };
 		681CDCA825AB0A7400DCBB0C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 681CDCA725AB0A7400DCBB0C /* RealmSwift */; };
+		68E7587925B7425F00BF47B0 /* XCTestCase+TrackForMemoryLeaks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E7587825B7425F00BF47B0 /* XCTestCase+TrackForMemoryLeaks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		08CE2BAE2285BCE700183A1B /* XCTestCase+FailableInsertFeedStoreSpecs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableInsertFeedStoreSpecs.swift"; sourceTree = "<group>"; };
 		08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreChallengeTests.swift; sourceTree = "<group>"; };
 		681CDC9A25AB052300DCBB0C /* RealmFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmFeedStore.swift; sourceTree = "<group>"; };
+		68E7587825B7425F00BF47B0 /* XCTestCase+TrackForMemoryLeaks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+TrackForMemoryLeaks.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */,
 				084BB13B24FE50A10091C705 /* FeedStoreIntegrationTests.swift */,
 				08CE2B9B2285BBD100183A1B /* Info.plist */,
+				68E7587825B7425F00BF47B0 /* XCTestCase+TrackForMemoryLeaks.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				084BB13C24FE50A10091C705 /* FeedStoreIntegrationTests.swift in Sources */,
 				08CE2BB12285BCE700183A1B /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
 				08CE2BAF2285BCE700183A1B /* XCTestCase+FeedStoreSpecs.swift in Sources */,
+				68E7587925B7425F00BF47B0 /* XCTestCase+TrackForMemoryLeaks.swift in Sources */,
 				08CE2BB32285BCE700183A1B /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
 				084BB13E24FE56830091C705 /* XCTestCase+FeedStoreHelpers.swift in Sources */,
 				08CE2BB52285BEF100183A1B /* FeedStoreChallengeTests.swift in Sources */,
